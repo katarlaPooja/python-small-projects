@@ -26,6 +26,24 @@ def add_student():
     }
 
     print("Student data added successfully!")
+#function to update students data
+def update_students():
+    name=input("Enter the students name:").strip()
+    if name not in students:
+        print("Student not found!")
+        return
+    marks_input=input("enter marks(0_100):").strip()
+    if not marks_input.isdigit():
+        print("Invalid input! please enter numbers only.")
+        return
+    marks=int(marks_input)
+    if marks<0 or marks>100:
+      print("marks must be between 0to 100.")
+      return
+    status="Pass" if marks>=50 else "Fail"
+    students[name]["marks"]=marks
+    students[name]["status"]=status
+    print("Student updated successfully!")
 
 # Function to view students
 def view_students():
@@ -37,13 +55,24 @@ def view_students():
         print(f"\nName: {name}")
         print(f"Marks: {details['marks']}")
         print(f"Status: {details['status']}")
+        
+#Delete students function
+def delete_students():
+    name=input("Enter students name to delete:").strip()
+    if name not in students:
+        print("students not found!")
+        return
+    del students[name]
+    print("student deleted sucessfully!")
 
 # Menu function
 def show_menu():
    while True:
         print("\n1. Add student")
         print("2. View students")
-        print("3. Exit")
+        print("3. Update students")
+        print("4. Delete students")
+        print("5. Exit")
 
         choice = input("Enter your choice: ").strip()
 
@@ -51,7 +80,11 @@ def show_menu():
             add_student()
         elif choice == "2":
             view_students()
-        elif choice == "3":
+         elif choice == "3":
+            update_students()
+         elif choice == "4":
+            delete_students()
+        elif choice == "5":
             print("Exiting program...")
             break
         else:
