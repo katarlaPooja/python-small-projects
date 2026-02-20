@@ -58,33 +58,61 @@ def view_students():
         
 #Delete students function
 def delete_students():
-    name=input("Enter students name to delete:").strip()
+    name=input("Enter students name to delete:").strip().lower()
     if name not in students:
         print("students not found!")
         return
     del students[name]
     print("student deleted sucessfully!")
+#search students function
+def search_student():
+    name =input("Enterstudent name to search :").strip().lower()
+    if name not in students:
+        print("student not found!")
+        return
+    details=students[name]
+ print("\n -----student Found----")
+    print(f"Name:{name.title()}")
+    print(f"Marks:{details['marks']}")
+    print(f"Status:{details['status']}")
+# Show topper
+def show_topper():
+    if not students:
+        print("No student records available.")
+        return
+
+    topper = max(students, key=lambda x: students[x]["marks"])
+    details = students[topper]
+
+    print("\n🏆 Topper Details")
+    print(f"Name   : {topper.title()}")
+    print(f"Marks  : {details['marks']}")
 
 # Menu function
 def show_menu():
    while True:
         print("\n1. Add student")
         print("2. View students")
-        print("3. Update students")
-        print("4. Delete students")
-        print("5. Exit")
-
+        print("3. update students")
+        print("4. delete students")
+        print("5. search student")
+        print("6.show topper")
+        print("7.exit")
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
             add_student()
         elif choice == "2":
             view_students()
-         elif choice == "3":
+        elif choice == "3":
             update_students()
-         elif choice == "4":
+        elif choice == "4":
             delete_students()
         elif choice == "5":
+            search_student()
+        elif choice == "6":
+            show_topper()
+        elif choice == "7":
             print("Exiting program...")
             break
         else:
