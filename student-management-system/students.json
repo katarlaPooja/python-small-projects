@@ -1,0 +1,24 @@
+{
+    "pooja": {
+        "marks": 90,
+        "status": "Pass"
+    }
+}
+{
+    "karthik": {
+        "marks": 89,
+        "status": "Pass"
+    }
+}
+{
+    "sunny": {
+        "marks": 85,
+        "status": "Pass"
+    }
+}
+{
+    "ramya": {
+        "marks": 45,
+        "status": "Fail"
+    }
+}
