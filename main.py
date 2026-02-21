@@ -1,5 +1,15 @@
+import json
 print("Welcome to student management system ")
-students={}
+students={} 
+try:
+    with open("students.json","r")as file:
+        students=json.load(file)
+except FileNotFoundError:
+    students={}
+#json function
+def save_data():
+    with open("students.json","w")as file:
+        json.dump(students,file,indent=4)
 # Function to add student
 def add_student():
     name = input("Enter the student name: ").strip()
@@ -64,6 +74,7 @@ def delete_students():
         return
     del students[name]
     print("student deleted sucessfully!")
+save_data()
 #search students function
 def search_student():
     name =input("Enterstudent name to search :").strip().lower()
