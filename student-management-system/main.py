@@ -1,6 +1,7 @@
 import json
 print("Welcome to student management system ")
 students={}
+#Load data if file exists
 try:
     with open("students.json","r")as file:
         students=json.load(file)
@@ -12,27 +13,16 @@ def save_data():
         json.dump(students,file,indent=4)
 # Function to add student
 def add_student():
-    name=input("enter student name:").strip()
-    if not name:
-        print("name cannot be empty")
-        return
-    if name in students:
-        print("Students already exists!")
-        return
-    marks_input=input("enter marks(0_100):").strip()
-    if not marks_input.isdigit():
-        print("Invalid input! please enter numbers only.")
-        return
-    marks=int(marks_input)
-    if marks<0 or marks>100:
-      print("marks must be between 0to 100.")
-      return
-    status="Pass" if marks>=50 else "Fail"
+    name=input("Enter student name:")
+    marks=int(input("Enter marks:"))
+    status="PASS"if marks>=50 else"FAIL"
     students[name]={
         "marks":marks,
         "status":status
     }
-    print("Student data added successfully!")
+    with open("students.json","w") as file:
+        json.dump(students,file)
+    print("Student added sucessfully!")
 #function to update student data
 def update_students():
     name = input("Enter the student name: ").strip()
