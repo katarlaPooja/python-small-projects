@@ -13,7 +13,7 @@ def save_data():
         json.dump(students,file,indent=4)
 # Function to add student
 def add_student():
-    name=input("Enter student name:")
+    name=input("Enter student name:").strip().title()
     marks=int(input("Enter marks:"))
     status="PASS"if marks>=50 else"FAIL"
     students[name]={
@@ -46,13 +46,12 @@ def update_students():
 def view_students():
     if not students:
         print("No student records found.")
-        return
-    print("\n---student records-----")
-    for name, details in students.items():
-        print(f"\nName: {name}")
-        print(f"Marks: {details['marks']}")
-        print(f"Status: {details['status']}")
-    print("====================")
+    else:
+        for name,details in students.items():
+            print(f"\nName: {name}")
+            print(f"Marks: {details['marks']}")
+            print(f"Status: {details['status']}")
+            print("-"*20)
 #Delete student function
 def delete_students():
     name=input("Enter student name to delete:").strip().lower()
@@ -116,6 +115,27 @@ def show_menu():
         else:
             print("Invalid choice. Try again.")
 
+# Clean menu function
+def main():
+    while True:
+        print("\n==== Student Management System ====")
+        print("1. Add Student")
+        print("2. View Students")
+        print("3. Exit")
+        choice = input("Enter your choice:")
+        if choice =="1":
+            add_student()
+        elif choice =="2":
+            view_students()
+        elif choice == "3":
+            print("Exiting program.... Goodbye!")
+            break
+        else:
+            print("Invalid choice.please try again."
+
+if _name_=="_main_":
+            main()
+        
 print(students)
 show_menu()
 print("project setup completed")
