@@ -1,100 +1,113 @@
 import json
-print("Welcome to student management system ")
-students={}
-#Load data if file exists
-try:
-    with open("students.json","r")as file:
-        students=json.load(file)
-except FileNotFoundError:
-    students={}
-#json function
-def save_data():
-    with open("students.json","w")as file:
-        json.dump(students,file,indent=4)
-# Function to add student
-def add_student():
-    name=input("Enter student name:").strip().title()
-    marks=int(input("Enter marks:"))
-    status="PASS"if marks>=50 else"FAIL"
-    students[name]={
-        "marks":marks,
-        "status":status
-    }
-    with open("students.json","w") as file:
-        json.dump(students,file)
-    print("Student added sucessfully!")
-#function to update student data
-def update_students():
-    name = input("Enter the student name: ").strip()
-    if name not in students:
-        print("Student not found!")
-        return
-    marks_input=input("enter marks(0_100):").strip()
-    if not marks_input.isdigit():
-        print("Invalid input! please enter numbers only.")
-        return
-    marks=int(marks_input)
-    if marks<0 or marks>100:
-      print("marks must be between 0to 100.")
-      return
-    status="Pass" if marks>=50 else "Fail"
-    students[name]["marks"]=marks
-    students[name]["status"]=status
-    print("Student updated successfully!")
 
-# Function to view students
+# Load data if file exists
+try:
+    with open("students.json", "r") as file:
+        students = json.load(file)
+except FileNotFoundError:
+    students = {}
+
+# json fuction
+def save_data():
+    with open("students.json", "w") as file:
+        json.dump(students, file, indent=4)
+
+# Function to add data
+def add_student():
+    name = input("Enter student name: ").strip().title()
+    if name in students:
+        print("Student already exists!")
+        return
+    marks_input = input("Enter marks (0-100): ").strip()
+    if not marks_input.isdigit():
+        print("Invalid input! Please enter numbers only.")
+        return
+    marks = int(marks_input)
+    if marks < 0 or marks > 100:
+        print("Marks must be between 0 and 100.")
+        return
+    status = "PASS" if marks >= 50 else "FAIL"
+    students[name] = {"marks": marks, "status": status}
+    save_data()
+    print(f"Student {name} added successfully!")
+
+# ---------- View Students ----------
 def view_students():
     if not students:
         print("No student records found.")
-    else:
-        for name,details in students.items():
-            print(f"\nName: {name}")
-            print(f"Marks: {details['marks']}")
-            print(f"Status: {details['status']}")
-            print("-"*20)
-#Delete student function
-def delete_students():
-    name=input("Enter student name to delete:").strip().lower()
+        return
+    print("\n--- Student Records ---")
+    for name, details in students.items():
+        print(f"Name: {name}")
+        print(f"Marks: {details['marks']}")
+        print(f"Status: {details['status']}")
+        print("-"*20)
+
+# ---------- Update Student ----------
+def update_student():
+    name = input("Enter student name to update: ").strip().title()
     if name not in students:
-        print("Students not found!")
+        print("Student not found!")
+        return
+    marks_input = input("Enter new marks (0-100): ").strip()
+    if not marks_input.isdigit():
+        print("Invalid input! Please enter numbers only.")
+        return
+    marks = int(marks_input)
+    if marks < 0 or marks > 100:
+        print("Marks must be between 0 and 100.")
+        return
+    status = "PASS" if marks >= 50 else "FAIL"
+    students[name]["marks"] = marks
+    students[name]["status"] = status
+    save_data()
+    print(f"Student {name} updated successfully!")
+
+# ---------- Delete Student ----------
+def delete_student():
+    name = input("Enter student name to delete: ").strip().title()
+    if name not in students:
+        print("Student not found!")
         return
     del students[name]
-    print("Student deleted successfully!")
-save_data()
-#Search student
+    save_data()
+    print(f"Student {name} deleted successfully!")
+
+# ---------- Search Student ----------
 def search_student():
-    name= input("Enter student name to search :").strip().lower()
+    name = input("Enter student name to search: ").strip().title()
     if name not in students:
-        print("student not found!")
+        print("Student not found!")
         return
-    details=students[name]
-    print("\n -----student Found----")
-    print(f"Name:{name.title()}")
-    print(f"Marks:{details['marks']}")
-    print(f"Status:{details['status']}")
-# Show topper
+    details = students[name]
+    print("\n--- Student Found ---")
+    print(f"Name: {name}")
+    print(f"Marks: {details['marks']}")
+    print(f"Status: {details['status']}")
+
+# ---------- Show Topper ----------
 def show_topper():
     if not students:
         print("No student records available.")
         return
-
     topper = max(students, key=lambda x: students[x]["marks"])
     details = students[topper]
-
     print("\n🏆 Topper Details")
-    print(f"Name   : {topper.title()}")
-    print(f"Marks  : {details['marks']}")
+    print(f"Name: {topper}")
+    print(f"Marks: {details['marks']}")
+    print(f"Status: {details['status']}")
 
-# Menu function
+# ---------- Menu ----------
 def show_menu():
-   while True:
-        print("\n1. Add student")
-        print("2. View students")
-        print("3. update students")
-        print("4. delete students")
-        print("5. search student")
-        print("6.show topper")
-        print("7.exit")
+    while True:
+        print("\n===== Student Management System =====")
+        print("1. Add Student")
+        print("2. View Students")
+        print("3. Update Student")
+        print("4. Delete Student")
+        print("5. Search Student")
+        print("6. Show Topper")
+        print("7. Exit")
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
@@ -102,40 +115,21 @@ def show_menu():
         elif choice == "2":
             view_students()
         elif choice == "3":
-            update_students()
+            update_student()
         elif choice == "4":
-            delete_students()
+            delete_student()
         elif choice == "5":
             search_student()
         elif choice == "6":
             show_topper()
         elif choice == "7":
-            print("Exiting program...")
+            print("Exiting program... Goodbye!")
             break
         else:
             print("Invalid choice. Try again.")
 
-# Clean menu function
-def main():
-    while True:
-        print("\n==== Student Management System ====")
-        print("1. Add Student")
-        print("2. View Students")
-        print("3. Exit")
-        choice = input("Enter your choice:")
-        if choice =="1":
-            add_student()
-        elif choice =="2":
-            view_students()
-        elif choice == "3":
-            print("Exiting program.... Goodbye!")
-            break
-        else:
-            print("Invalid choice.please try again."
-
-if _name_=="_main_":
-            main()
-        
-print(students)
-show_menu()
-print("project setup completed")
+# ---------- Main ----------
+if __name__ == "__main__":
+    print("Welcome to the Student Management System!")
+    show_menu()
+    print("Project setup completed")
