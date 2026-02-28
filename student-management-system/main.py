@@ -97,6 +97,26 @@ def show_topper():
     print(f"Marks: {details['marks']}")
     print(f"Status: {details['status']}")
 
+# ------function to Add Statistics
+def show_statistics():
+    if not students:
+        print("No student records available.")
+        return
+    marks_/list =[details["marks"] for details in students .values()]
+    total = len(marks_list)
+    average = sum(marks_list) / total
+    highest = max(marks_list)
+    lowest = min(marks_list)
+    pass_count = sum(1 from m in marks_list if m >= 50)
+    fail_count = total - pass_count
+    print("\n Class Statistics")
+    print(f"Total Students : {total}")
+    print(f"Average Marks : {average:.2f}")
+    print(f"Highest Marks : {highest}")
+    print(f"Lowest Marks : {lowest}")
+    print(f"Pass_count : {pass_count}")
+    print(f"Fail_count : {fail_count}")
+
 # ---------- Menu ----------
 def show_menu():
     while True:
@@ -107,7 +127,8 @@ def show_menu():
         print("4. Delete Student")
         print("5. Search Student")
         print("6. Show Topper")
-        print("7. Exit")
+        print("7. Show Statistics")
+        print("8. Exit")
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
@@ -123,6 +144,8 @@ def show_menu():
         elif choice == "6":
             show_topper()
         elif choice == "7":
+            show_statistics()
+        elif choice == "8":
             print("Exiting program... Goodbye!")
             break
         else:
