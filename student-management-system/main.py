@@ -97,7 +97,7 @@ def show_topper():
     print(f"Marks: {details['marks']}")
     print(f"Status: {details['status']}")
 
-# ------function to Add Statistics
+# ------function to Add Statistics-----------
 def show_statistics():
     if not students:
         print("No student records available.")
@@ -117,6 +117,16 @@ def show_statistics():
     print(f"Pass_count : {pass_count}")
     print(f"Fail_count : {fail_count}")
 
+# -------Ranking system ----------
+def show_ranking():
+    sorted_students = sorted(
+        students.items(),
+        key=lambda item: item[1]["marks'],
+        reverse=True
+    )
+    for rank,(name,details) in enumerate(sorted_students, start=1):
+        print(f"{rank}.{name} - {details['marks']}")
+    
 # ---------- Menu ----------
 def show_menu():
     while True:
@@ -128,7 +138,8 @@ def show_menu():
         print("5. Search Student")
         print("6. Show Topper")
         print("7. Show Statistics")
-        print("8. Exit")
+        print("8. Show Ranking")
+        print("9. Exit")
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
@@ -146,6 +157,8 @@ def show_menu():
         elif choice == "7":
             show_statistics()
         elif choice == "8":
+            show_ranking()
+        elif choice == "9":
             print("Exiting program... Goodbye!")
             break
         else:
