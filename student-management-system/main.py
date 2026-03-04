@@ -1,171 +1,196 @@
 import json
 
-# Load data if file exists
-try:
-    with open("students.json", "r") as file:
-        students = json.load(file)
-except FileNotFoundError:
-    students = {}
+class StudentManager:
 
-# json fuction
-def save_data():
-    with open("students.json", "w") as file:
-        json.dump(students, file, indent=4)
+    def __init__(self):
+        # Load data if file exists
+        try:
+            with open("students.json", "r") as file:
+                self.students = json.load(file)
+        except FileNotFoundError:
+            self.students = {}
 
-# Function to add data
-def add_student():
-    name = input("Enter student name: ").strip().title()
-    if name in students:
-        print("Student already exists!")
-        return
-    marks_input = input("Enter marks (0-100): ").strip()
-    if not marks_input.isdigit():
-        print("Invalid input! Please enter numbers only.")
-        return
-    marks = int(marks_input)
-    if marks < 0 or marks > 100:
-        print("Marks must be between 0 and 100.")
-        return
-    status = "PASS" if marks >= 50 else "FAIL"
-    students[name] = {"marks": marks, "status": status}
-    save_data()
-    print(f"Student {name} added successfully!")
+    # Save data to JSON
+    def save_data(self):
+        with open("students.json", "w") as file:
+            json.dump(self.students, file, indent=4)
 
-# ---------- View Students ----------
-def view_students():
-    if not students:
-        print("No student records found.")
-        return
-    print("\n--- Student Records ---")
-    for name, details in students.items():
+    # Add Student
+    def add_student(self):
+        name = input("Enter student name: ").strip().title()
+        if name in self.students:
+            print("Student already exists!")
+            return
+
+        marks_input = input("Enter marks (0-100): ").strip()
+        if not marks_input.isdigit():
+            print("Invalid input! Please enter numbers only.")
+            return
+
+        marks = int(marks_input)
+        if marks < 0 or marks > 100:
+            print("Marks must be between 0 and 100.")
+            return
+
+        status = "PASS" if marks >= 50 else "FAIL"
+        self.students[name] = {"marks": marks, "status": status}
+        self.save_data()
+        print(f"Student {name} added successfully!")
+
+    # View Students
+    def view_students(self):
+        if not self.students:
+            print("No student records found.")
+            return
+
+        print("\n--- Student Records ---")
+        for name, details in self.students.items():
+            print(f"Name: {name}")
+            print(f"Marks: {details['marks']}")
+            print(f"Status: {details['status']}")
+            print("-" * 20)
+
+    # Update Student
+    def update_student(self):
+        name = input("Enter student name to update: ").strip().title()
+        if name not in self.students:
+            print("Student not found!")
+            return
+
+        marks_input = input("Enter new marks (0-100): ").strip()
+        if not marks_input.isdigit():
+            print("Invalid input! Please enter numbers only.")
+            return
+
+        marks = int(marks_input)
+        if marks < 0 or marks > 100:
+            print("Marks must be between 0 and 100.")
+            return
+
+        status = "PASS" if marks >= 50 else "FAIL"
+        self.students[name]["marks"] = marks
+        self.students[name]["status"] = status
+        self.save_data()
+        print(f"Student {name} updated successfully!")
+
+    # Delete Student
+    def delete_student(self):
+        name = input("Enter student name to delete: ").strip().title()
+        if name not in self.students:
+            print("Student not found!")
+            return
+
+        del self.students[name]
+        self.save_data()
+        print(f"Student {name} deleted successfully!")
+
+    # Search Student
+    def search_student(self):
+        name = input("Enter student name to search: ").strip().title()
+        if name not in self.students:
+            print("Student not found!")
+            return
+
+        details = self.students[name]
+        print("\n--- Student Found ---")
         print(f"Name: {name}")
         print(f"Marks: {details['marks']}")
         print(f"Status: {details['status']}")
-        print("-"*20)
 
-# ---------- Update Student ----------
-def update_student():
-    name = input("Enter student name to update: ").strip().title()
-    if name not in students:
-        print("Student not found!")
-        return
-    marks_input = input("Enter new marks (0-100): ").strip()
-    if not marks_input.isdigit():
-        print("Invalid input! Please enter numbers only.")
-        return
-    marks = int(marks_input)
-    if marks < 0 or marks > 100:
-        print("Marks must be between 0 and 100.")
-        return
-    status = "PASS" if marks >= 50 else "FAIL"
-    students[name]["marks"] = marks
-    students[name]["status"] = status
-    save_data()
-    print(f"Student {name} updated successfully!")
+    # Show Topper
+    def show_topper(self):
+        if not self.students:
+            print("No student records available.")
+            return
 
-# ---------- Delete Student ----------
-def delete_student():
-    name = input("Enter student name to delete: ").strip().title()
-    if name not in students:
-        print("Student not found!")
-        return
-    del students[name]
-    save_data()
-    print(f"Student {name} deleted successfully!")
+        topper = max(self.students, key=lambda x: self.students[x]["marks"])
+        details = self.students[topper]
 
-# ---------- Search Student ----------
-def search_student():
-    name = input("Enter student name to search: ").strip().title()
-    if name not in students:
-        print("Student not found!")
-        return
-    details = students[name]
-    print("\n--- Student Found ---")
-    print(f"Name: {name}")
-    print(f"Marks: {details['marks']}")
-    print(f"Status: {details['status']}")
+        print("\n🏆 Topper Details")
+        print(f"Name: {topper}")
+        print(f"Marks: {details['marks']}")
+        print(f"Status: {details['status']}")
 
-# ---------- Show Topper ----------
-def show_topper():
-    if not students:
-        print("No student records available.")
-        return
-    topper = max(students, key=lambda x: students[x]["marks"])
-    details = students[topper]
-    print("\n🏆 Topper Details")
-    print(f"Name: {topper}")
-    print(f"Marks: {details['marks']}")
-    print(f"Status: {details['status']}")
+    # Show Statistics
+    def show_statistics(self):
+        if not self.students:
+            print("No student records available.")
+            return
 
-# ------function to Add Statistics-----------
-def show_statistics():
-    if not students:
-        print("No student records available.")
-        return
-    marks_/list =[details["marks"] for details in students .values()]
-    total = len(marks_list)
-    average = sum(marks_list) / total
-    highest = max(marks_list)
-    lowest = min(marks_list)
-    pass_count = sum(1 from m in marks_list if m >= 50)
-    fail_count = total - pass_count
-    print("\n Class Statistics")
-    print(f"Total Students : {total}")
-    print(f"Average Marks : {average:.2f}")
-    print(f"Highest Marks : {highest}")
-    print(f"Lowest Marks : {lowest}")
-    print(f"Pass_count : {pass_count}")
-    print(f"Fail_count : {fail_count}")
+        marks_list = [details["marks"] for details in self.students.values()]
+        total = len(marks_list)
+        average = sum(marks_list) / total
+        highest = max(marks_list)
+        lowest = min(marks_list)
+        pass_count = sum(1 for m in marks_list if m >= 50)
+        fail_count = total - pass_count
 
-# -------Ranking system ----------
-def show_ranking():
-    sorted_students = sorted(
-        students.items(),
-        key=lambda item: item[1]["marks'],
-        reverse=True
-    )
-    for rank,(name,details) in enumerate(sorted_students, start=1):
-        print(f"{rank}.{name} - {details['marks']}")
-    
-# ---------- Menu ----------
-def show_menu():
-    while True:
-        print("\n===== Student Management System =====")
-        print("1. Add Student")
-        print("2. View Students")
-        print("3. Update Student")
-        print("4. Delete Student")
-        print("5. Search Student")
-        print("6. Show Topper")
-        print("7. Show Statistics")
-        print("8. Show Ranking")
-        print("9. Exit")
-        choice = input("Enter your choice: ").strip()
+        print("\nClass Statistics")
+        print(f"Total Students : {total}")
+        print(f"Average Marks : {average:.2f}")
+        print(f"Highest Marks : {highest}")
+        print(f"Lowest Marks : {lowest}")
+        print(f"Pass Count : {pass_count}")
+        print(f"Fail Count : {fail_count}")
 
-        if choice == "1":
-            add_student()
-        elif choice == "2":
-            view_students()
-        elif choice == "3":
-            update_student()
-        elif choice == "4":
-            delete_student()
-        elif choice == "5":
-            search_student()
-        elif choice == "6":
-            show_topper()
-        elif choice == "7":
-            show_statistics()
-        elif choice == "8":
-            show_ranking()
-        elif choice == "9":
-            print("Exiting program... Goodbye!")
-            break
-        else:
-            print("Invalid choice. Try again.")
+    # Show Ranking
+    def show_ranking(self):
+        if not self.students:
+            print("No student records available.")
+            return
 
-# ---------- Main ----------
+        sorted_students = sorted(
+            self.students.items(),
+            key=lambda item: item[1]["marks"],
+            reverse=True
+        )
+
+        print("\n🏅 Ranking")
+        for rank, (name, details) in enumerate(sorted_students, start=1):
+            print(f"{rank}. {name} - {details['marks']}")
+
+    # Menu
+    def show_menu(self):
+        while True:
+            print("\n===== Student Management System =====")
+            print("1. Add Student")
+            print("2. View Students")
+            print("3. Update Student")
+            print("4. Delete Student")
+            print("5. Search Student")
+            print("6. Show Topper")
+            print("7. Show Statistics")
+            print("8. Show Ranking")
+            print("9. Exit")
+
+            choice = input("Enter your choice: ").strip()
+
+            if choice == "1":
+                self.add_student()
+            elif choice == "2":
+                self.view_students()
+            elif choice == "3":
+                self.update_student()
+            elif choice == "4":
+                self.delete_student()
+            elif choice == "5":
+                self.search_student()
+            elif choice == "6":
+                self.show_topper()
+            elif choice == "7":
+                self.show_statistics()
+            elif choice == "8":
+                self.show_ranking()
+            elif choice == "9":
+                print("Exiting program... Goodbye!")
+                break
+            else:
+                print("Invalid choice. Try again.")
+
+
+# Main
 if __name__ == "__main__":
     print("Welcome to the Student Management System!")
-    show_menu()
+    manager = StudentManager()
+    manager.show_menu()
     print("Project setup completed")
