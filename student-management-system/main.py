@@ -1,48 +1,42 @@
 import json
-
 class StudentManager:
-
     def __init__(self):
-        # Load data if file exists
+# Function to Load data if file exists
         try:
             with open("students.json", "r") as file:
                 self.students = json.load(file)
         except FileNotFoundError:
             self.students = {}
-
-    # Save data to JSON
+            
+# Function to Save data to JSON
     def save_data(self):
         with open("students.json", "w") as file:
             json.dump(self.students, file, indent=4)
 
-    # Add Student
+# Function to  Add Student
     def add_student(self):
         name = input("Enter student name: ").strip().title()
         if name in self.students:
             print("Student already exists!")
             return
-
         marks_input = input("Enter marks (0-100): ").strip()
         if not marks_input.isdigit():
             print("Invalid input! Please enter numbers only.")
             return
-
         marks = int(marks_input)
         if marks < 0 or marks > 100:
             print("Marks must be between 0 and 100.")
             return
-
         status = "PASS" if marks >= 50 else "FAIL"
         self.students[name] = {"marks": marks, "status": status}
         self.save_data()
         print(f"Student {name} added successfully!")
-
-    # View Students
+        
+#Function to View Students
     def view_students(self):
         if not self.students:
             print("No student records found.")
             return
-
         print("\n--- Student Records ---")
         for name, details in self.students.items():
             print(f"Name: {name}")
@@ -50,73 +44,68 @@ class StudentManager:
             print(f"Status: {details['status']}")
             print("-" * 20)
 
-    # Update Student
+# Function to  Update Student
     def update_student(self):
         name = input("Enter student name to update: ").strip().title()
         if name not in self.students:
             print("Student not found!")
             return
-
         marks_input = input("Enter new marks (0-100): ").strip()
         if not marks_input.isdigit():
             print("Invalid input! Please enter numbers only.")
             return
-
         marks = int(marks_input)
         if marks < 0 or marks > 100:
             print("Marks must be between 0 and 100.")
             return
-
         status = "PASS" if marks >= 50 else "FAIL"
         self.students[name]["marks"] = marks
         self.students[name]["status"] = status
         self.save_data()
         print(f"Student {name} updated successfully!")
-
-    # Delete Student
+        
+#Function to  Delete Student
     def delete_student(self):
         name = input("Enter student name to delete: ").strip().title()
         if name not in self.students:
             print("Student not found!")
             return
-
-        del self.students[name]
-        self.save_data()
-        print(f"Student {name} deleted successfully!")
-
-    # Search Student
+        confirm = input(f"Are you sure you want to delete {name}? (yes/no): ").lower()
+        if confirm == "yes":
+            del self.students[name]
+            self.save_data()
+            print(f"Student {name} deleted successfully!")
+        else:
+            print("Deletion cancelled.")
+#Function to Search Student
     def search_student(self):
         name = input("Enter student name to search: ").strip().title()
         if name not in self.students:
             print("Student not found!")
             return
-
         details = self.students[name]
         print("\n--- Student Found ---")
         print(f"Name: {name}")
         print(f"Marks: {details['marks']}")
         print(f"Status: {details['status']}")
 
-    # Show Topper
+# Function to Show Topper
     def show_topper(self):
         if not self.students:
             print("No student records available.")
             return
-
         topper = max(self.students, key=lambda x: self.students[x]["marks"])
         details = self.students[topper]
-
         print("\n🏆 Topper Details")
         print(f"Name: {topper}")
         print(f"Marks: {details['marks']}")
         print(f"Status: {details['status']}")
 
-    # Show Statistics
+# Function to Show Statistics
     def show_statistics(self):
         if not self.students:
             print("No student records available.")
             return
-
         marks_list = [details["marks"] for details in self.students.values()]
         total = len(marks_list)
         average = sum(marks_list) / total
@@ -124,7 +113,6 @@ class StudentManager:
         lowest = min(marks_list)
         pass_count = sum(1 for m in marks_list if m >= 50)
         fail_count = total - pass_count
-
         print("\nClass Statistics")
         print(f"Total Students : {total}")
         print(f"Average Marks : {average:.2f}")
@@ -133,23 +121,21 @@ class StudentManager:
         print(f"Pass Count : {pass_count}")
         print(f"Fail Count : {fail_count}")
 
-    # Show Ranking
+# Function to Show Ranking
     def show_ranking(self):
         if not self.students:
             print("No student records available.")
             return
-
         sorted_students = sorted(
             self.students.items(),
             key=lambda item: item[1]["marks"],
             reverse=True
         )
-
         print("\n🏅 Ranking")
         for rank, (name, details) in enumerate(sorted_students, start=1):
             print(f"{rank}. {name} - {details['marks']}")
 
-    # Menu
+#Function to  Show Menu
     def show_menu(self):
         while True:
             print("\n===== Student Management System =====")
@@ -162,9 +148,7 @@ class StudentManager:
             print("7. Show Statistics")
             print("8. Show Ranking")
             print("9. Exit")
-
             choice = input("Enter your choice: ").strip()
-
             if choice == "1":
                 self.add_student()
             elif choice == "2":
@@ -188,7 +172,7 @@ class StudentManager:
                 print("Invalid choice. Try again.")
 
 
-# Main
+# Function to Show Main
 if __name__ == "__main__":
     print("Welcome to the Student Management System!")
     manager = StudentManager()
