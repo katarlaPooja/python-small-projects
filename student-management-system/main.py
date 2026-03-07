@@ -171,7 +171,20 @@ class StudentManager:
             else:
                 print("Invalid choice. Try again.")
 
-
+# Function to Login
+def login():
+    USERNAME = "admin"
+    PASSWORD = "1234"
+    print("====== Login System ======")
+    while True:
+        username = input("Enter Username: ")
+        password = input("Enter password: ")
+        if username == USERNAME and password == PASSWORD:
+            print("Login Sucessfully!\n")
+            break
+        else:
+            print("Invalid username or password.Try again.\n")
+            
 # Function to Show Main
 if __name__ == "__main__":
     print("Welcome to the Student Management System!")
