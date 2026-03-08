@@ -1,4 +1,5 @@
 import json
+import csv
 class StudentManager:
     def __init__(self):
 # Function to Load data if file exists
@@ -64,7 +65,7 @@ class StudentManager:
         self.save_data()
         print(f"Student {name} updated successfully!")
         
-#Function to  Delete Student
+# Function to  Delete Student
     def delete_student(self):
         name = input("Enter student name to delete: ").strip().title()
         if name not in self.students:
@@ -77,7 +78,7 @@ class StudentManager:
             print(f"Student {name} deleted successfully!")
         else:
             print("Deletion cancelled.")
-#Function to Search Student
+# Function to Search Student
     def search_student(self):
         name = input("Enter student name to search: ").strip().title()
         if name not in self.students:
@@ -134,8 +135,22 @@ class StudentManager:
         print("\n🏅 Ranking")
         for rank, (name, details) in enumerate(sorted_students, start=1):
             print(f"{rank}. {name} - {details['marks']}")
-
-#Function to  Show Menu
+    
+# Function to Export
+    def export_to_csv(self):
+        if not self.students:
+            print("No Student records available.")
+            return
+        with open("students_report.csv","w",newline="")as file:
+            writer =csv.writer(file)
+            #Header row
+            writer.writerow(["Name","Marks","status"])
+            #student data
+            for name, details in self.students.items():
+                writer.writerow([name,details["marks"],details["status"]])
+        print("students reported sucessfully to students_report.csv")
+        
+# Function to  Show Menu
     def show_menu(self):
         while True:
             print("\n===== Student Management System =====")
@@ -147,7 +162,8 @@ class StudentManager:
             print("6. Show Topper")
             print("7. Show Statistics")
             print("8. Show Ranking")
-            print("9. Exit")
+            print("9. Export to csv")
+            print("10. Exit")
             choice = input("Enter your choice: ").strip()
             if choice == "1":
                 self.add_student()
@@ -166,6 +182,8 @@ class StudentManager:
             elif choice == "8":
                 self.show_ranking()
             elif choice == "9":
+                self.export_to_csv()
+            elif choice == "10":
                 print("Exiting program... Goodbye!")
                 break
             else:
@@ -187,6 +205,7 @@ def login():
             
 # Function to Show Main
 if __name__ == "__main__":
+    login()
     print("Welcome to the Student Management System!")
     manager = StudentManager()
     manager.show_menu()
