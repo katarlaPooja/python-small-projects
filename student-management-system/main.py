@@ -149,6 +149,24 @@ class StudentManager:
             for name, details in self.students.items():
                 writer.writerow([name,details["marks"],details["status"]])
         print("students reported sucessfully to students_report.csv")
+
+# Function of Dashboar
+    def show_dashboard(self):
+        print("\n===Student Dashboard====")
+        if not self.students:
+            print("No students records available")
+            print("===========")
+            return
+        marks_list = [details["marks"]for details in self.students.values()]
+        total = len(marks_list)
+        pass_count = sum(1 for details in marks_list if m >=50)
+        fail_count = total-pass_count
+        average = sum(marks_list) / total
+        print(f"Total Students : {total}")
+        print(f"Pass Students  : {pass_count}")
+        print(f"Fail Students  : {fail_count}")
+        print(f"Average Marks  : {average:.2f}")
+        print("========")
         
 # Function to  Show Menu
     def show_menu(self):
@@ -208,5 +226,6 @@ if __name__ == "__main__":
     login()
     print("Welcome to the Student Management System!")
     manager = StudentManager()
+    manager,show_dashboard()
     manager.show_menu()
     print("Project setup completed")
