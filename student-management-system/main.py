@@ -167,7 +167,26 @@ class StudentManager:
         print(f"Fail Students  : {fail_count}")
         print(f"Average Marks  : {average:.2f}")
         print("========")
-        
+
+# Function to Search by marks 
+    def search_by_marks(self):
+        if not self.students:
+            print("No Students records available.")
+            return
+        marks_input = input("Enter minimum marks:").strip()
+        if not marks_input.isdigit():
+            print("Invalid input.Please enter numbers only.")
+            return
+        min_marks = int(marks_input)
+        print(f"\nStudents with marks >={min_marks}")
+        found = False
+        for name,details in self.students.items():
+            if details["marks"] >= min_marks:
+                print(f"{name} - {details['marks']}")
+                found = True
+        if not found:
+            print("No  Students found with that marks range.")
+            
 # Function to  Show Menu
     def show_menu(self):
         while True:
@@ -181,7 +200,8 @@ class StudentManager:
             print("7. Show Statistics")
             print("8. Show Ranking")
             print("9. Export to csv")
-            print("10. Exit")
+            print("10. Search by marks")
+            print("11. Exit")
             choice = input("Enter your choice: ").strip()
             if choice == "1":
                 self.add_student()
@@ -202,6 +222,8 @@ class StudentManager:
             elif choice == "9":
                 self.export_to_csv()
             elif choice == "10":
+                self.search_by_marks()
+            elif choice == "11":
                 print("Exiting program... Goodbye!")
                 break
             else:
